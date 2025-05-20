@@ -15,34 +15,41 @@
     body {
       background: linear-gradient(to bottom right, #ffe6f0, #ffccff);
       height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow-x: hidden;
       text-align: center;
-      padding: 2rem;
-      position: relative;
-      transition: background 1s ease;
     }
     .container {
       max-width: 700px;
+      margin: auto;
       padding: 2rem;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 2rem;
       box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
-      animation: fadeIn 2s ease;
+      margin-top: 5vh;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+      display: none;
     }
-    h1, h2, p {
-      color: #ff0066;
+    .container.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
     h1 {
       font-family: 'Great Vibes', cursive;
       font-size: 3rem;
-      margin-bottom: 1rem;
+      color: #ff0066;
+    }
+    h2, p {
+      color: #ff0066;
     }
     p {
       font-size: 1.2rem;
       margin: 1rem 0;
+    }
+    .emoji {
+      font-size: 2rem;
     }
     button {
       padding: 0.75rem 2rem;
@@ -56,14 +63,6 @@
     }
     button:hover {
       transform: scale(1.1);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .hidden { display: none; }
-    .emoji {
-      font-size: 2rem;
     }
     .gallery {
       display: grid;
@@ -79,16 +78,79 @@
     .gallery img:hover {
       transform: scale(1.1);
     }
+    #music-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: #ffccff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    .splash h1 {
+      color: #ff0066;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- MP3 background music (hidden) -->
-  <audio autoplay loop style="display: none;">
+  <!-- Splash Screen -->
+  <div class="splash" id="splash">
+    <h1>Hi Jessu! 💕<br>Are You Ready for a Surprise?</h1>
+    <button onclick="startExperience()">Start the Magic ✨</button>
+  </div>
+
+  <!-- Music -->
+  <audio id="bg-music" loop>
     <source src="je-chhau-timi.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
+  <button id="music-btn" onclick="toggleAudio()">🎵</button>
 
+  <!-- Pages -->
   <div class="container" id="page1">
     <h1>Welcome My Love ❤️</h1>
     <p class="emoji">🥰🌹💕</p>
@@ -96,43 +158,39 @@
     <button onclick="nextPage(1)">Next ➡️</button>
   </div>
 
-  <div class="container hidden" id="page2">
+  <div class="container" id="page2">
     <h2>Are you excited for the surprise? 💖🎁</h2>
     <p class="emoji">😍✨💝</p>
     <button onclick="nextPage(2)">Next ➡️</button>
   </div>
 
-  <div class="container hidden" id="page3">
+  <div class="container" id="page3">
     <h2>Jessu, dear love 💌</h2>
     <p>
       You are the reason behind my happiness,<br>
-      the strength I carry, and my very existence.<br>
-      Every day, I fall for you more and more. 💘<br><br>
-      When you came into my life, everything changed beautifully.<br>
+      the strength I carry, and my very existence.<br><br>
+      Every day, I fall for you more and more. 💘<br>
+      When you came into my life, everything changed beautifully.<br><br>
       I love you till my last breath. 💖<br>
-      Keep loving me, supporting me, and caring for me.<br>
       I wish to be yours for all the lives to come.<br><br>
-      Thank you for everything, Happy 2 Years Anniversary! 🎉
+      Thank you for everything, Happy 2 Years Anniversary! 🎉<br>
+      Love you Maya 😘
     </p>
-    <p>Love you Maya 😘</p>
     <p class="emoji">💞🫶🥺</p>
     <button onclick="nextPage(3)">Next ➡️</button>
   </div>
 
-  <div class="container hidden" id="page4">
+  <div class="container" id="page4">
     <h2>It's Not Finished Yet! 🎊</h2>
-    <p>
-      I have one more surprise...<br>
-      All our memories, just for you 💑
-    </p>
+    <p>I have one more surprise...<br>All our memories, just for you 💑</p>
     <p class="emoji">🎥📸💖</p>
     <button onclick="nextPage(4)">Next ➡️</button>
   </div>
 
-  <div class="container hidden" id="page5">
+  <div class="container" id="page5">
     <h2>Our Beautiful Memories ❤️</h2>
     <div class="gallery">
-      <!-- Replace with your real image file names -->
+      <!-- Replace with real images -->
       <img src="img1.jpg" alt="Memory 1">
       <img src="img2.jpg" alt="Memory 2">
       <img src="img3.jpg" alt="Memory 3">
@@ -140,17 +198,45 @@
       <img src="img5.jpg" alt="Memory 5">
       <img src="img6.jpg" alt="Memory 6">
       <img src="img7.jpg" alt="Memory 7">
-      <img src="img11.jpg" alt="Memory 8">
-      <img src="img9.jpg" alt="Memory 9">
-      <img src="img10.jpg" alt="Memory 10">
+      <img src="img9.jpg" alt="Memory 8">
+      <img src="img10.jpg" alt="Memory 9">
+      <img src="img11.jpg" alt="Memory 10">
     </div>
     <p class="emoji">💘🥹🫂🎆</p>
   </div>
 
   <script>
-    function nextPage(current) {
-      document.getElementById(`page${current}`).classList.add('hidden');
-      document.getElementById(`page${current + 1}`).classList.remove('hidden');
+    function startExperience() {
+      document.getElementById("splash").style.display = "none";
+      document.getElementById("page1").classList.add("active");
+      document.getElementById("bg-music").play().catch(() => {});
+    }
+
+    function nextPage(num) {
+      document.getElementById(`page${num}`).classList.remove("active");
+      document.getElementById(`page${num + 1}`).classList.add("active");
+
+      // Trigger confetti + hearts
+      if (num + 1 === 5) {
+        createHearts();
+      }
+    }
+
+    function toggleAudio() {
+      const audio = document.getElementById("bg-music");
+      if (audio.paused) audio.play();
+      else audio.pause();
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
     }
   </script>
 </body>
