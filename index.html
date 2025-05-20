@@ -61,9 +61,7 @@
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
     .emoji {
       font-size: 2rem;
     }
@@ -85,7 +83,7 @@
 </head>
 <body>
 
-  <!-- Background music (starts on interaction) -->
+  <!-- Background music (will start on first user click) -->
   <audio id="bg-music" loop>
     <source src="audio/je-chhau-timi.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -95,7 +93,6 @@
     <h1>Welcome My Love ❤️</h1>
     <p class="emoji">🥰🌹💕</p>
     <p>Today is very special — our 2nd Anniversary! 💑</p>
-    <p style="font-size: 0.9rem; color: #888;">🔊 Turn on your volume for the full experience!</p>
     <button onclick="nextPage(1)">Next ➡️</button>
   </div>
 
@@ -135,6 +132,7 @@
   <div class="container hidden" id="page5">
     <h2>Our Beautiful Memories ❤️</h2>
     <div class="gallery">
+      <!-- Replace with real image file names -->
       <img src="img1.jpg" alt="Memory 1">
       <img src="img2.jpg" alt="Memory 2">
       <img src="img3.jpg" alt="Memory 3">
@@ -151,19 +149,25 @@
 
   <script>
     let musicStarted = false;
+
     function nextPage(current) {
       document.getElementById(`page${current}`).classList.add('hidden');
       document.getElementById(`page${current + 1}`).classList.remove('hidden');
 
-      // Play music after first user interaction
+      // Start background music on first user interaction
       if (!musicStarted) {
         const audio = document.getElementById("bg-music");
-        audio.play().catch((e) => {
-          console.log("Autoplay blocked:", e);
+        audio.muted = false;
+        audio.volume = 1.0;
+        audio.play().then(() => {
+          musicStarted = true;
+          console.log("Music started successfully.");
+        }).catch((err) => {
+          console.warn("Music play blocked or failed:", err);
         });
-        musicStarted = true;
       }
     }
   </script>
+
 </body>
 </html>
