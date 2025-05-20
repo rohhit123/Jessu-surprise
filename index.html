@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Anniversary Jessu ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(to bottom right, #ffe6f0, #ffccff);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      transition: background 1s ease;
+    }
+    .container {
+      max-width: 700px;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 2rem;
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
+      animation: fadeIn 2s ease;
+    }
+    h1, h2, p {
+      color: #ff0066;
+    }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      background-color: #ff66a3;
+      border: none;
+      color: white;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .hidden { display: none; }
+    .emoji {
+      font-size: 2rem;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 1rem;
+      transition: transform 0.5s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- YouTube background music -->
+  <iframe 
+    width="0" 
+    height="0" 
+    src="https://www.youtube.com/embed/_Tk9_kPpO1U?autoplay=1&loop=1&playlist=_Tk9_kPpO1U" 
+    frameborder="0" 
+    allow="autoplay" 
+    allowfullscreen 
+    style="display: none;">
+  </iframe>
+
+  <div class="container" id="page1">
+    <h1>Welcome My Love ❤️</h1>
+    <p class="emoji">🥰🌹💕</p>
+    <p>Today is very special — our 2nd Anniversary! 💑</p>
+    <button onclick="nextPage(1)">Next ➡️</button>
+  </div>
+
+  <div class="container hidden" id="page2">
+    <h2>Are you excited for the surprise? 💖🎁</h2>
+    <p class="emoji">😍✨💝</p>
+    <button onclick="nextPage(2)">Next ➡️</button>
+  </div>
+
+  <div class="container hidden" id="page3">
+    <h2>Jessu, dear love 💌</h2>
+    <p>
+      You are the reason behind my happiness,<br>
+      the strength I carry, and my very existence.<br>
+      Every day, I fall for you more and more. 💘<br><br>
+      When you came into my life, everything changed beautifully.<br>
+      I love you till my last breath. 💖<br>
+      Keep loving me, supporting me, and caring for me.<br>
+      I wish to be yours for all the lives to come.<br><br>
+      Thank you for everything, Happy 2 Years Anniversary! 🎉
+    </p>
+    <p>Love you Maya 😘</p>
+    <p class="emoji">💞🫶🥺</p>
+    <button onclick="nextPage(3)">Next ➡️</button>
+  </div>
+
+  <div class="container hidden" id="page4">
+    <h2>It's Not Finished Yet! 🎊</h2>
+    <p>
+      I have one more surprise...<br>
+      All our memories, just for you 💑
+    </p>
+    <p class="emoji">🎥📸💖</p>
+    <button onclick="nextPage(4)">Next ➡️</button>
+  </div>
+
+  <div class="container hidden" id="page5">
+    <h2>Our Beautiful Memories ❤️</h2>
+    <div class="gallery">
+      <!-- Replace the image URLs with your own -->
+      <img src="img1.jpg" alt="Memory 1">
+      <img src="img2.jpg" alt="Memory 2">
+      <img src="img3.jpg" alt="Memory 3">
+      <img src="img4.jpg" alt="Memory 4">
+      <img src="img5.jpg" alt="Memory 5">
+      <img src="img6.jpg" alt="Memory 6">
+      <img src="img7.jpg" alt="Memory 7">
+      <img src="img11.jpg" alt="Memory 8">
+      <img src="img9.jpg" alt="Memory 9">
+      <img src="img10.jpg" alt="Memory 10">
+    </div>
+    <p class="emoji">💘🥹🫂🎆</p>
+  </div>
+
+  <script>
+    function nextPage(current) {
+      document.getElementById(`page${current}`).classList.add('hidden');
+      document.getElementById(`page${current + 1}`).classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
