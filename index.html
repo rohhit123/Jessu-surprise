@@ -12,12 +12,14 @@
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
+
     body {
       background: linear-gradient(to bottom right, #ffe6f0, #ffccff);
-      height: 100vh;
       overflow-x: hidden;
       text-align: center;
+      position: relative;
     }
+
     .container {
       max-width: 700px;
       margin: auto;
@@ -25,32 +27,25 @@
       background: rgba(255, 255, 255, 0.9);
       border-radius: 2rem;
       box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
-      margin-top: 5vh;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s ease;
-      display: none;
+      margin-top: 5rem;
+      animation: fadeIn 2s ease;
     }
-    .container.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
+
+    h1, h2, p {
+      color: #ff0066;
     }
+
     h1 {
       font-family: 'Great Vibes', cursive;
       font-size: 3rem;
-      color: #ff0066;
+      margin-bottom: 1rem;
     }
-    h2, p {
-      color: #ff0066;
-    }
+
     p {
       font-size: 1.2rem;
       margin: 1rem 0;
     }
-    .emoji {
-      font-size: 2rem;
-    }
+
     button {
       padding: 0.75rem 2rem;
       font-size: 1rem;
@@ -60,182 +55,433 @@
       border-radius: 1rem;
       cursor: pointer;
       transition: transform 0.3s ease;
+      margin-top: 1rem;
     }
+
     button:hover {
       transform: scale(1.1);
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .emoji {
+      font-size: 2rem;
+    }
+
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 1rem;
       margin-top: 2rem;
     }
+
     .gallery img {
-      width: 100%;
+      width: 30%;
+      max-width: 200px;
       border-radius: 1rem;
       transition: transform 0.5s ease;
     }
+
     .gallery img:hover {
       transform: scale(1.1);
     }
+
     #music-btn {
-      position: absolute;
+      position: fixed;
       top: 1rem;
       right: 1rem;
       background: none;
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
-    }
-    .splash {
-      position: fixed;
-      inset: 0;
-      background: #ffccff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      flex-direction: column;
-      padding: 2rem;
-    }
-    .splash h1 {
-      color: #ff0066;
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
+      z-index: 999;
     }
 
+    /* Typed text */
+    .typed {
+      border-right: 2px solid #ff0066;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink-caret {
+      50% { border-color: transparent; }
+    }
+
+    /* Falling hearts animation */
     .heart {
       position: fixed;
       width: 20px;
       height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: float 5s linear infinite;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+      background-size: cover;
+      animation: fall 6s linear infinite;
+      pointer-events: none;
+      z-index: 0;
     }
-    .heart::before,
-    .heart::after {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
-    .heart::after {
-      left: -10px;
+
+    /* Welcome popup */
+    #welcome-popup {
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    @keyframes float {
-      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
-      100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+
+    #welcome-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      text-align: center;
+      max-width: 90%;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #welcome-content h2 {
+      font-size: 2rem;
+      color: #ff0066;
+    }
+
+    #welcome-content p {
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Splash Screen -->
-  <div class="splash" id="splash">
-    <h1>Hi Jessu! 💕<br>Are You Ready for a Surprise?</h1>
-    <button onclick="startExperience()">Start the Magic ✨</button>
-  </div>
+  <!-- Falling hearts -->
+  <script>
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }, 300);
+  </script>
 
-  <!-- Music -->
-  <audio id="bg-music" loop>
+  <!-- Background Music -->
+  <audio autoplay loop id="bg-music">
     <source src="je-chhau-timi.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
-  <button id="music-btn" onclick="toggleAudio()">🎵</button>
 
-  <!-- Pages -->
-  <div class="container" id="page1">
-    <h1>Welcome My Love ❤️</h1>
+  <!-- Music Toggle Button -->
+  <button id="music-btn" onclick="toggleAudio()">🔊</button>
+
+  <!-- Welcome Popup -->
+  <div id="welcome-popup">
+    <div id="welcome-content">
+      <h2>Welcome My Love 💖</h2>
+      <p>Get ready for something magical on our 2nd Anniversary 💕</p>
+      <button onclick="startSurprise()">Start Surprise ✨</button>
+    </div>
+  </div>
+
+  <!-- Page 1 -->
+  <div class="container hidden" id="page1">
+    <h1>Hello My Princess Jessu ❤️</h1>
     <p class="emoji">🥰🌹💕</p>
-    <p>Today is very special — our 2nd Anniversary! 💑</p>
+    <p>Today marks 2 wonderful years of our love 💑</p>
     <button onclick="nextPage(1)">Next ➡️</button>
   </div>
 
-  <div class="container" id="page2">
-    <h2>Are you excited for the surprise? 💖🎁</h2>
+  <!-- Page 2 -->
+  <div class="container hidden" id="page2">
+    <h2>Are you ready for a little surprise? 💖🎁</h2>
     <p class="emoji">😍✨💝</p>
     <button onclick="nextPage(2)">Next ➡️</button>
   </div>
 
-  <div class="container" id="page3">
-    <h2>Jessu, dear love 💌</h2>
+  <!-- Page 3 -->
+  <div class="container hidden" id="page3">
+  <h2>To My Dearest Jessu 💌</h2>
+  <p class="typed" id="typed-text" style="white-space: normal;">
+    You are the reason behind my happiness,<br>
+    the strength I carry, and my very existence.<br><br>
+    When you came into my life, everything changed beautifully.<br>
+    I fall for you more every day.<br><br>
+    I love you till my last breath.<br>
+    Thank you for everything.<br><br>
+    Happy 2nd Anniversary! 💖
+  </p>
+  <p class="emoji">💞🫶🥺</p>
+  <button onclick="nextPage(3)">Next ➡️</button>
+</div>
+
+
+  <!-- Page 4 -->
+  <div class="container hidden" id="page4">
+    <h2>Wait... there’s more! 🎊</h2>
     <p>
-      You are the reason behind my happiness,<br>
-      the strength I carry, and my very existence.<br><br>
-      Every day, I fall for you more and more. 💘<br>
-      When you came into my life, everything changed beautifully.<br><br>
-      I love you till my last breath. 💖<br>
-      I wish to be yours for all the lives to come.<br><br>
-      Thank you for everything, Happy 2 Years Anniversary! 🎉<br>
-      Love you Maya 😘
+      A gift full of our sweetest memories 💑
     </p>
-    <p class="emoji">💞🫶🥺</p>
-    <button onclick="nextPage(3)">Next ➡️</button>
-  </div>
-
-  <div class="container" id="page4">
-    <h2>It's Not Finished Yet! 🎊</h2>
-    <p>I have one more surprise...<br>All our memories, just for you 💑</p>
     <p class="emoji">🎥📸💖</p>
-    <button onclick="nextPage(4)">Next ➡️</button>
+    <button onclick="nextPage(4)">Show Memories 📸</button>
   </div>
 
-  <div class="container" id="page5">
-    <h2>Our Beautiful Memories ❤️</h2>
-    <div class="gallery">
-      <!-- Replace with real images -->
-      <img src="img1.jpg" alt="Memory 1">
-      <img src="img2.jpg" alt="Memory 2">
-      <img src="img3.jpg" alt="Memory 3">
-      <img src="img4.jpg" alt="Memory 4">
-      <img src="img5.jpg" alt="Memory 5">
-      <img src="img6.jpg" alt="Memory 6">
-      <img src="img7.jpg" alt="Memory 7">
-      <img src="img9.jpg" alt="Memory 8">
-      <img src="img10.jpg" alt="Memory 9">
-      <img src="img11.jpg" alt="Memory 10">
+  <!-- Page 5 -->
+ <!-- PAGE 5 HTML -->
+<!-- Page 5 -->
+<div class="container hidden" id="page5">
+  <h2>Our Beautiful Moments ❤️</h2>
+
+  <div class="slideshow-container">
+    <!-- Slides with captions -->
+    <div class="slide fade">
+      <img src="img1.jpg" alt="Memory 1" />
+      <div class="caption">Our first date under the stars ✨</div>
     </div>
-    <p class="emoji">💘🥹🫂🎆</p>
+    <div class="slide fade">
+      <img src="img2.jpg" alt="Memory 2" />
+      <div class="caption">Laughing together like forever 😂</div>
+    </div>
+    <div class="slide fade">
+      <img src="img3.jpg" alt="Memory 3" />
+      <div class="caption">That beautiful sunset we shared 🌅</div>
+    </div>
+    <div class="slide fade">
+      <img src="img4.jpg" alt="Memory 4" />
+      <div class="caption">Sweet moments, just us two 💕</div>
+    </div>
+    <div class="slide fade">
+      <img src="img5.jpg" alt="Memory 5" />
+      <div class="caption">Holding hands, always and forever 👫</div>
+    </div>
+    <div class="slide fade">
+      <img src="img6.jpg" alt="Memory 6" />
+      <div class="caption">Our silly adventures 🌈</div>
+    </div>
+    <div class="slide fade">
+      <img src="img7.jpg" alt="Memory 7" />
+      <div class="caption">Smiles that light up my world 😍</div>
+    </div>
+    <div class="slide fade">
+      <img src="img11.jpg" alt="Memory 8" />
+      <div class="caption">A day to remember forever 💖</div>
+    </div>
+    <div class="slide fade">
+      <img src="img9.jpg" alt="Memory 9" />
+      <div class="caption">Heartbeats in sync 💓</div>
+    </div>
+    <div class="slide fade">
+      <img src="img10.jpg" alt="Memory 10" />
+      <div class="caption">Our endless love story 📖❤️</div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button class="prev" onclick="plusSlides(-1)">❮</button>
+    <button class="next" onclick="plusSlides(1)">❯</button>
+
+    <!-- Floating hearts container -->
+    <div id="floating-hearts"></div>
   </div>
+
+  <p class="emoji">💘🥹🫂🎆</p>
+</div>
+
+<style>
+  /* Slideshow styling */
+  .slideshow-container {
+    max-width: 600px;
+    height: 420px;
+    margin: 30px auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+    background: rgba(255, 192, 203, 0.1);
+    backdrop-filter: blur(8px);
+  }
+  .slide {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+  .slide img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+  }
+  .caption {
+    font-size: 1.1rem;
+    color: #ff0066;
+    padding: 0.5rem 0;
+    background: #ffe6f0;
+    border-radius: 0 0 20px 20px;
+  }
+  .fade {
+    animation: fadeEffect 1s ease-in-out;
+  }
+  @keyframes fadeEffect {
+    from {opacity: 0.3;}
+    to {opacity: 1;}
+  }
+  /* Navigation buttons */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    color: #ff0066;
+    font-weight: bold;
+    font-size: 2rem;
+    border-radius: 50%;
+    background: rgba(255, 192, 203, 0.7);
+    border: none;
+    user-select: none;
+    transition: background 0.3s ease;
+    z-index: 10;
+  }
+  .prev:hover, .next:hover {
+    background: #ff66a3;
+    color: white;
+  }
+  .prev {
+    left: 10px;
+  }
+  .next {
+    right: 10px;
+  }
+  /* Floating hearts container */
+  #floating-hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .heart {
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    color: #ff66a3;
+    animation-name: floatUp;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+    opacity: 0.8;
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-400px) scale(1.5);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  let slideIndex = 1;
+  showSlides(slideIndex);
+
+  // Next/previous controls
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  function showSlides(n) {
+    const slides = document.getElementsByClassName("slide");
+    if (n > slides.length) slideIndex = 1;
+    if (n < 1) slideIndex = slides.length;
+
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+  }
+
+  // Auto slideshow (optional)
+  let autoSlideTimer = setInterval(() => {
+    plusSlides(1);
+  }, 3500);
+
+  // Floating hearts animation
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.textContent = '❤️';
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.animationDuration = (2 + Math.random() * 3) + 's';
+    heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+
+    const container = document.getElementById('floating-hearts');
+    container.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  }
+
+  setInterval(createHeart, 400);
+</script>
+
 
   <script>
-    function startExperience() {
-      document.getElementById("splash").style.display = "none";
-      document.getElementById("page1").classList.add("active");
-      document.getElementById("bg-music").play().catch(() => {});
+    function startSurprise() {
+      document.getElementById("welcome-popup").style.display = "none";
+      document.getElementById("page1").classList.remove("hidden");
     }
 
-    function nextPage(num) {
-      document.getElementById(`page${num}`).classList.remove("active");
-      document.getElementById(`page${num + 1}`).classList.add("active");
-
-      // Trigger confetti + hearts
-      if (num + 1 === 5) {
-        createHearts();
-      }
+    function nextPage(current) {
+      document.getElementById(`page${current}`).classList.add('hidden');
+      document.getElementById(`page${current + 1}`).classList.remove('hidden');
     }
+
+    const bgMusic = document.getElementById("bg-music");
+
+    // Ensure mobile autoplay
+    document.body.addEventListener("click", function initAudio() {
+      bgMusic.play().catch(() => {});
+      document.body.removeEventListener("click", initAudio);
+    });
 
     function toggleAudio() {
-      const audio = document.getElementById("bg-music");
-      if (audio.paused) audio.play();
-      else audio.pause();
-    }
-
-    function createHearts() {
-      for (let i = 0; i < 30; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
       }
     }
   </script>
